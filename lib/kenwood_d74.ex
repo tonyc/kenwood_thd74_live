@@ -61,7 +61,7 @@ defmodule KenwoodD74 do
     {:noreply}
   end
 
-  defp broadcast(%RadioInfo{} = info) do
-    LiveviewDemoWeb.Endpoint.broadcast(@topic, "radio_info", %{payload: info})
+  defp broadcast(%RadioInfo{} = radio_info) do
+    LiveviewDemoWeb.Endpoint.broadcast(@topic, "radio_info", radio_info)
   end
 end

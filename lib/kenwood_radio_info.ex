@@ -1,4 +1,6 @@
 defmodule KenwoodD74.RadioInfo do
+  @derive Jason.Encoder
+
   defstruct command: "", args: []
 
   def parse(raw_msg) do

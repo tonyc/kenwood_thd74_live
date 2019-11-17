@@ -2,6 +2,7 @@ defmodule LiveViewDemoWeb.DemoLive do
   use Phoenix.LiveView
   require Logger
   alias Phoenix.Socket.{Broadcast}
+  alias KenwoodD74.{RadioInfo}
 
   @topic "radio"
 
@@ -13,7 +14,7 @@ defmodule LiveViewDemoWeb.DemoLive do
       Phoenix.PubSub.subscribe(LiveviewDemo.PubSub, @topic)
     end
 
-    {:ok, assign(socket, :current_time, DateTime.utc_now())}
+    {:ok, assign(socket, :radio_info, encode(%RadioInfo{}))}
   end
 
   @impl true
@@ -21,18 +22,17 @@ defmodule LiveViewDemoWeb.DemoLive do
     Logger.debug("render()")
 
     ~L"""
-    <h1>At the tone, the time will be <%= @current_time %></h1>
-    <h1>Beep.</h1>
+    <h1><%= @radio_info %></h1>
     """
   end
 
   @impl true
-  def handle_info(%Broadcast{event: _message} = broadcast, socket) do
-    IO.puts "***** handled broadcast: #{inspect broadcast}"
+  def handle_info(%Broadcast{event: "radio_info", payload: radio_info}, socket) do
+    {:noreply, assign(socket, :radio_info, encode(radio_info))}
+  end
 
-
-
-    {:noreply, socket}
+  defp encode(thing) do
+    Jason.encode!(thing)
   end
 
 end
