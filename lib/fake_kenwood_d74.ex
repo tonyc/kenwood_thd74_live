@@ -5,7 +5,7 @@ defmodule FakeKenwoodD74 do
   alias KenwoodD74.{RadioInfo}
 
   @topic "radio"
-  @timer_interval 25
+  @timer_interval 10 
   @messages [
     "FQ 0,0442075000",
     "SM 0,0",

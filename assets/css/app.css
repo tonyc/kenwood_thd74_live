@@ -6,3 +6,9 @@
 /* LiveView */
 @import "../../deps/phoenix_live_view/assets/css/live_view.css";
 
+.vfo {
+  font-family: "Impact";
+  font-size: 74pt;
+  font-weight: 500;
+}
+

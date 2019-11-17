@@ -28,8 +28,8 @@ defmodule LiveViewDemoWeb.DemoLive do
     Logger.debug("render()")
 
     ~L"""
-    <h1>VFO A: <%= @vfo_a_frequency %></h1>
-    <h1>VFO B: <%= @vfo_b_frequency %></h1>
+    <h1 id="vfoA">A: <span class="vfo"><%= @vfo_a_frequency %></span></h1>
+    <h1 id="vfoB">B: <span class="vfo"><%= @vfo_b_frequency %></span></h1>
     """
   end
 
