@@ -1,0 +1,30 @@
+<div id="radio">
+  <div id="vfoA">
+
+    <div class="vfoStatus">
+      <%= if @current_vfo == :a do %>
+        <span class="pttIndicator">PTT</span>
+      <% end %>
+    </div>
+    <h1>
+      <span class="vfo"><%= format_frequency(@vfo_a_frequency) %></span>
+    </h1>
+  </div>
+
+  <div id="vfoB">
+    <div class="vfoStatus">
+      <%= if @current_vfo == :b do %>
+        <span class="pttIndicator">PTT</span>
+      <% end %>
+    </div>
+    <h1>
+      <span class="vfo"><%= format_frequency(@vfo_b_frequency) %></span>
+    </h1>
+  </h1>
+
+  <h2 id="audioGain">Volume: <%= format_volume(@audio_gain) %>%</h2>
+
+  <div class="progress">
+    <div class="progress-bar" style="width:<%= format_volume(@audio_gain) %>%"></div>
+  </div>
+</div>

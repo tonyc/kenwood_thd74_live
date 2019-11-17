@@ -3,12 +3,18 @@ defmodule KenwoodD74 do
 
   alias KenwoodD74.{RadioInfo}
 
+  require Logger
+
   @topic "radio"
 
+  def start_link(args \\ "/dev/ttyACM0") do
+    IO.puts("start_link(), args: #{inspect(args)}")
+    GenServer.start_link(__MODULE__, args)
+  end
+
   @impl true
-  def init(args \\ "ttyACM0") do
-    IO.puts("init(), args: #{inspect(args)}")
-    port = args
+  def init(port) do
+    IO.puts("init(), args: #{inspect(port)}")
 
     {:ok, pid} = Circuits.UART.start_link()
     Circuits.UART.open(pid, port, speed: 115_200, active: true)
@@ -19,10 +25,6 @@ defmodule KenwoodD74 do
     {:ok, %{pid: pid, port: port}}
   end
 
-  def start_link(state \\ %{}) do
-    IO.puts("start_link(), state: #{inspect(state)}")
-    GenServer.start_link(__MODULE__, state)
-  end
 
   def handle_info(:circuits_uart, _port, {:error, :eio}, state) do
     IO.puts("Error: IO")
@@ -30,11 +32,13 @@ defmodule KenwoodD74 do
   end
 
   def handle_info(:setup, state) do
-    IO.puts("handle_info: :setup, setting AI 1, state: #{inspect(state)}")
+    Logger.info("handle_info: :setup, setting AI 1, state: #{inspect(state)}")
     Circuits.UART.write(state.pid, "AI 1")
     Circuits.UART.write(state.pid, "AI 1")
     Circuits.UART.write(state.pid, "AI 1")
     Circuits.UART.write(state.pid, "AI 1")
+
+    Logger.info("Done attempting to set AI 1")
 
     {:noreply, state}
   end

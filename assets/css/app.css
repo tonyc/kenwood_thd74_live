@@ -10,5 +10,19 @@
   font-family: "Impact";
   font-size: 74pt;
   font-weight: 500;
+  white-space: pre;
 }
 
+.pttIndicator {
+  background-color: black;
+  color: white;
+  border-radius: 3px;
+  font-size: 12pt;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  
+}
+
+.vfoStatus {
+  /*border: 1px dashed red;*/
+}
