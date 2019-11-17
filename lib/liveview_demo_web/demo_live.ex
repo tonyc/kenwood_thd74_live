@@ -52,8 +52,4 @@ defmodule LiveViewDemoWeb.DemoLive do
     {:noreply, socket}
   end
 
-  #defp encode(thing) do
-  #  Jason.encode!(thing)
-  #end
-
 end
