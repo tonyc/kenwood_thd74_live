@@ -181,30 +181,24 @@ defmodule FakeKenwoodD74 do
   @impl true
   def init(_args) do
     Logger.info("init")
+    :timer.send_interval(@timer_interval, self(), :generate_message)
 
-    Process.send_after(self(), :setup, 100)
-
-    {:ok, %{}}
+    {:ok, %{idx: 0, total: Enum.count(@messages)}}
   end
 
   @impl true
-  def handle_info(:setup, state) do
-    :timer.send_interval(@timer_interval, self(), :generate_message)
-    {:noreply, state}
-  end
-
-  def handle_info(:generate_message, state) do
+  def handle_info(:generate_message, %{idx: idx, total: total} = state) do
     @messages
-      |> Enum.random()
-      |> RadioInfo.parse()
-      |> broadcast()
+    |> Enum.at(idx)
+    |> RadioInfo.parse()
+    |> broadcast()
 
-    {:noreply, state}
+    new_index = rem(idx + 1, total)
+
+    {:noreply, %{state | idx: new_index}}
   end
 
   defp broadcast(%RadioInfo{} = radio_info) do
     LiveviewDemoWeb.Endpoint.broadcast(@topic, "radio_info", radio_info)
   end
-
-
 end
