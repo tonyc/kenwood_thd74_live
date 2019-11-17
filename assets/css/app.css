@@ -24,5 +24,14 @@
 }
 
 .vfoStatus {
+  margin-bottom: 1rem;
   /*border: 1px dashed red;*/
+}
+
+.signalIndicator {
+  height: 25px;
+}
+
+.debug {
+  border: 1px dotted red;
 }

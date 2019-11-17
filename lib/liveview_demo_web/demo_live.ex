@@ -20,7 +20,9 @@ defmodule LiveViewDemoWeb.DemoLive do
 
     socket = socket
              |> assign(:vfo_a_frequency, "0")
+             |> assign(:vfo_a_squelch_open, false)
              |> assign(:vfo_b_frequency, "0")
+             |> assign(:vfo_b_squelch_open, false)
              |> assign(:current_vfo, :a)
              |> assign(:audio_gain, "006")
 
@@ -44,6 +46,14 @@ defmodule LiveViewDemoWeb.DemoLive do
 
   def update_from_command("BC", ["1"], socket) do
     {:noreply, assign(socket, :current_vfo, :b)}
+  end
+
+  def update_from_command("BY", ["0", status], socket) do
+    {:noreply, assign(socket, :vfo_a_squelch_open, (status == "1"))}
+  end
+
+  def update_from_command("BY", ["1", status], socket) do
+    {:noreply, assign(socket, :vfo_b_squelch_open, (status == "1"))}
   end
 
   def update_from_command("FQ", ["0" | rest], socket) do

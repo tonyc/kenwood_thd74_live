@@ -17,6 +17,13 @@ defmodule LiveviewDemoWeb.PageView do
     end
   end
 
+  def squelch_state_to_percentage(state) do
+    case state do
+      false -> 0
+      _ -> 100
+    end
+  end
+
   def format_volume(volume_string) do
     {vol, _} = Integer.parse(volume_string)
 

@@ -6,6 +6,11 @@
         <span class="pttIndicator">PTT</span>
       <% end %>
     </div>
+
+    <div class="signalIndicator progress">
+      <div class="progress-bar bg-success progress-bar-animated progress-bar-striped" style="width:<%= squelch_state_to_percentage(@vfo_a_squelch_open) %>%"></div>
+    </div>
+
     <h1>
       <span class="vfo"><%= format_frequency(@vfo_a_frequency) %></span>
     </h1>
@@ -17,14 +22,21 @@
         <span class="pttIndicator">PTT</span>
       <% end %>
     </div>
+
+    <div class="signalIndicator progress">
+      <div class="progress-bar bg-success progress-bar-animated progress-bar-striped" role="progressbar" style="width:<%= squelch_state_to_percentage(@vfo_b_squelch_open) %>%"></div>
+    </div>
+
     <h1>
       <span class="vfo"><%= format_frequency(@vfo_b_frequency) %></span>
     </h1>
   </h1>
 
+  <hr />
+
   <h2 id="audioGain">Volume: <%= format_volume(@audio_gain) %>%</h2>
 
   <div class="progress">
-    <div class="progress-bar" style="width:<%= format_volume(@audio_gain) %>%"></div>
+    <div class="progress-bar" role="progressbar" style="width:<%= format_volume(@audio_gain) %>%"></div>
   </div>
 </div>
