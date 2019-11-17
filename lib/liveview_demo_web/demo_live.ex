@@ -16,7 +16,11 @@ defmodule LiveViewDemoWeb.DemoLive do
 
     {:ok, socket}
 
-    #{:ok, assign(socket, :radio_info, encode(%RadioInfo{}))}
+    socket = socket
+             |> assign(:vfo_a_frequency, "")
+             |> assign(:vfo_b_frequency, "")
+
+    {:ok, socket}
   end
 
   @impl true
