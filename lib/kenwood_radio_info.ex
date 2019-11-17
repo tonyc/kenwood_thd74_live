@@ -1,7 +1,7 @@
 defmodule KenwoodD74.RadioInfo do
   @derive Jason.Encoder
 
-  defstruct command: "", args: []
+  defstruct cmd: "", args: []
 
   def parse(raw_msg) do
     [command, args] =
@@ -12,6 +12,6 @@ defmodule KenwoodD74.RadioInfo do
       args
       |> String.split(",")
 
-    %__MODULE__{command: command, args: split_args}
+    %__MODULE__{cmd: command, args: split_args}
   end
 end

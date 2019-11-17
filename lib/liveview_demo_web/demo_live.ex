@@ -14,7 +14,9 @@ defmodule LiveViewDemoWeb.DemoLive do
       Phoenix.PubSub.subscribe(LiveviewDemo.PubSub, @topic)
     end
 
-    {:ok, assign(socket, :radio_info, encode(%RadioInfo{}))}
+    {:ok, socket}
+
+    #{:ok, assign(socket, :radio_info, encode(%RadioInfo{}))}
   end
 
   @impl true
@@ -22,17 +24,32 @@ defmodule LiveViewDemoWeb.DemoLive do
     Logger.debug("render()")
 
     ~L"""
-    <h1><%= @radio_info %></h1>
+    <h1>VFO A: <%= @vfo_a_frequency %></h1>
+    <h1>VFO B: <%= @vfo_b_frequency %></h1>
     """
   end
 
   @impl true
   def handle_info(%Broadcast{event: "radio_info", payload: radio_info}, socket) do
-    {:noreply, assign(socket, :radio_info, encode(radio_info))}
+    %RadioInfo{cmd: cmd, args: args} = radio_info
+    update_from_command(cmd, args, socket)
   end
 
-  defp encode(thing) do
-    Jason.encode!(thing)
+  def update_from_command("FQ", ["0" | rest], socket) do
+    {:noreply, assign(socket, :vfo_a_frequency, rest)}
   end
+
+  def update_from_command("FQ", ["1" | rest], socket) do
+    {:noreply, assign(socket, :vfo_b_frequency, rest)}
+  end
+
+  def update_from_command(cmd, args, socket) do
+    Logger.info("update_from_command: unknown command: #{inspect cmd}, args: #{inspect args}")
+    {:noreply, socket}
+  end
+
+  #defp encode(thing) do
+  #  Jason.encode!(thing)
+  #end
 
 end
