@@ -25,7 +25,6 @@ defmodule KenwoodD74 do
     {:ok, %{pid: pid, port: port}}
   end
 
-
   def handle_info(:circuits_uart, _port, {:error, :eio}, state) do
     IO.puts("Error: IO")
     {:noreply, state}
