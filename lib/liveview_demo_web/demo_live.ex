@@ -34,6 +34,16 @@ defmodule LiveViewDemoWeb.DemoLive do
     PageView.render("radio.html", assigns)
   end
 
+  def handle_event("mic_up", _meta, socket) do
+    Logger.info("Mic Up")
+    {:noreply, socket}
+  end
+
+  def handle_event("mic_dn", _meta, socket) do
+    Logger.info("Mic Down")
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_info(%Broadcast{event: "radio_info", payload: radio_info}, socket) do
     %RadioInfo{cmd: cmd, args: args} = radio_info

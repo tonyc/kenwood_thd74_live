@@ -39,4 +39,9 @@
   <div class="progress">
     <div class="progress-bar" role="progressbar" style="width:<%= format_volume(@audio_gain) %>%"></div>
   </div>
+
+  <div class="controlButtons">
+    <button type="button" class="btn btn-outline-primary" phx-click="mic_up">Up</button>
+    <button type="button" class="btn btn-outline-primary" phx-click="mic_dn">Down</button>
+  </div>
 </div>
