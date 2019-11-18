@@ -3,6 +3,7 @@ defmodule LiveViewDemoWeb.DemoLive do
   require Logger
   alias Phoenix.Socket.{Broadcast}
   alias KenwoodD74.{RadioInfo}
+  alias KenwoodD74
 
   alias LiveviewDemoWeb.PageView
 
@@ -18,13 +19,14 @@ defmodule LiveViewDemoWeb.DemoLive do
 
     {:ok, socket}
 
-    socket = socket
-             |> assign(:vfo_a_frequency, "0")
-             |> assign(:vfo_a_squelch_open, false)
-             |> assign(:vfo_b_frequency, "0")
-             |> assign(:vfo_b_squelch_open, false)
-             |> assign(:current_vfo, :a)
-             |> assign(:audio_gain, "006")
+    socket =
+      socket
+      |> assign(:vfo_a_frequency, "0")
+      |> assign(:vfo_a_squelch_open, false)
+      |> assign(:vfo_b_frequency, "0")
+      |> assign(:vfo_b_squelch_open, false)
+      |> assign(:current_vfo, :a)
+      |> assign(:audio_gain, "006")
 
     {:ok, socket}
   end
@@ -34,13 +36,27 @@ defmodule LiveViewDemoWeb.DemoLive do
     PageView.render("radio.html", assigns)
   end
 
+  @impl true
   def handle_event("mic_up", _meta, socket) do
-    Logger.info("Mic Up")
+    KenwoodD74.radio_up()
     {:noreply, socket}
   end
 
   def handle_event("mic_dn", _meta, socket) do
-    Logger.info("Mic Down")
+    KenwoodD74.radio_down()
+
+    {:noreply, socket}
+  end
+
+  def handle_event("set_vfo_a", _meta, socket) do
+    KenwoodD74.set_vfo_a()
+
+    {:noreply, socket}
+  end
+
+  def handle_event("set_vfo_b", _meta, socket) do
+    KenwoodD74.set_vfo_b()
+
     {:noreply, socket}
   end
 
@@ -59,11 +75,11 @@ defmodule LiveViewDemoWeb.DemoLive do
   end
 
   def update_from_command("BY", ["0", status], socket) do
-    {:noreply, assign(socket, :vfo_a_squelch_open, (status == "1"))}
+    {:noreply, assign(socket, :vfo_a_squelch_open, status == "1")}
   end
 
   def update_from_command("BY", ["1", status], socket) do
-    {:noreply, assign(socket, :vfo_b_squelch_open, (status == "1"))}
+    {:noreply, assign(socket, :vfo_b_squelch_open, status == "1")}
   end
 
   def update_from_command("FQ", ["0" | rest], socket) do
@@ -82,8 +98,7 @@ defmodule LiveViewDemoWeb.DemoLive do
   end
 
   def update_from_command(cmd, args, socket) do
-    Logger.info("update_from_command: unknown command: #{inspect cmd}, args: #{inspect args}")
+    Logger.info("update_from_command: unknown command: #{inspect(cmd)}, args: #{inspect(args)}")
     {:noreply, socket}
   end
-
 end

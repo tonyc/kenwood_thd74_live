@@ -40,8 +40,14 @@
     <div class="progress-bar" role="progressbar" style="width:<%= format_volume(@audio_gain) %>%"></div>
   </div>
 
+  <hr />
+
   <div class="controlButtons">
-    <button type="button" class="btn btn-outline-primary" phx-click="mic_up">Up</button>
-    <button type="button" class="btn btn-outline-primary" phx-click="mic_dn">Down</button>
-  </div>
+    <button type="button" class="btn btn-lg btn-outline btn-secondary" phx-click="set_vfo_a">VFO A</button>
+    <button type="button" class="btn btn-lg btn-outline btn-secondary" phx-click="set_vfo_b">VFO B</button>
+  
+    <button type="button" class="btn btn-lg btn-primary" phx-click="mic_up">&#x25B2;</button>
+    <button type="button" class="btn btn-lg btn-primary" phx-click="mic_dn">&#x25BC;</button>
 </div>
+
+

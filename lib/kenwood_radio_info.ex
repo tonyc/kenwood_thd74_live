@@ -1,5 +1,6 @@
 defmodule KenwoodD74.RadioInfo do
   @derive Jason.Encoder
+  require Logger
 
   defstruct cmd: "", args: []
 
@@ -8,6 +9,7 @@ defmodule KenwoodD74.RadioInfo do
       raw_msg
       |> String.split(" ")
 
+    Logger.info("command, args: #{inspect command}")
     split_args =
       args
       |> String.split(",")
