@@ -7,9 +7,6 @@
 # General application configuration
 use Mix.Config
 
-config :liveview_demo,
-  ecto_repos: [LiveviewDemo.Repo]
-
 # Configures the endpoint
 config :liveview_demo, LiveviewDemoWeb.Endpoint,
   url: [host: "localhost"],
