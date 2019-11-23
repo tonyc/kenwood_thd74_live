@@ -118,7 +118,7 @@ defmodule KenwoodD74 do
   # Handles parseable radio messages (those with more than one word)
   # TODO: Discern between APRS, D-Star, GPS, and standard Kenwood CAT messages
   def handle_info({:circuits_uart, _port, message}, state) do
-    Logger.info("handle_info: :circuits_uart: unknown message: #{message}")
+    Logger.info("handle_info: :circuits_uart: attempting to parse message: #{message}")
 
     message
     |> RadioInfo.parse()
