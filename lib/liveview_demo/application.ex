@@ -10,7 +10,7 @@ defmodule LiveviewDemo.Application do
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
-      LiveviewDemo.Repo,
+      #LiveviewDemo.Repo,
       # Start the endpoint when the application starts
       LiveviewDemoWeb.Endpoint,
       supervisor(LiveviewDemo.RadioSupervisor, ["ttyACM0"])

@@ -34,17 +34,16 @@ defmodule LiveviewDemo.MixProject do
   defp deps do
     [
       {:circuits_uart, "~> 1.3.2"},
-      {:ecto_sql, "~> 3.1"},
+      #{:ecto_sql, "~> 3.1"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.4.11"},
-      {:phoenix_ecto, "~> 4.0"},
+      #{:phoenix_ecto, "~> 4.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, ">= 0.0.0"},
       {:phoenix_pubsub, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
-      {:postgrex, ">= 0.0.0"},
     ]
   end
 
@@ -56,9 +55,9 @@ defmodule LiveviewDemo.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      #"ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      #"ecto.reset": ["ecto.drop", "ecto.setup"],
+      #test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end
