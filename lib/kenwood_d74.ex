@@ -4,6 +4,14 @@ defmodule KenwoodD74 do
   alias KenwoodD74.{RadioInfo, Responses}
 
   @topic "radio"
+  @init_commands [
+    "AI 1",
+    "AI 1",
+    "AI 1",
+    "FQ 0",
+    "FQ 1",
+    "BC"
+  ]
 
   # Client API
 
@@ -11,6 +19,9 @@ defmodule KenwoodD74 do
     Logger.info("KenwoodD74.start_link(), args: #{inspect(args)}")
     GenServer.start_link(__MODULE__, args, name: __MODULE__)
   end
+
+  def enable_auto_info, do: send_command("AI 1")
+  def disable_auto_info, do: send_command("AI 0")
 
   def radio_up do
     send_command("UP")
@@ -65,14 +76,13 @@ defmodule KenwoodD74 do
       Circuits.UART.open(pid, port, speed: 115_200, active: true)
       Circuits.UART.configure(pid, framing: {Circuits.UART.Framing.Line, separator: "\r"})
 
-      Logger.info("handle_info: :setup, setting AI 1, state: #{inspect(state)}")
-      Circuits.UART.write(state.pid, "AI 1")
-      Process.sleep(500)
-      Circuits.UART.write(state.pid, "AI 1")
-      Process.sleep(500)
-      Circuits.UART.write(state.pid, "AI 1")
+      Logger.info("handle_info: :setup, sending init_commands, state: #{inspect(state)}")
 
-      Logger.info("Done attempting to set AI 1")
+      @init_commands
+      |> Enum.each(fn cmd ->
+        Circuits.UART.write(state.pid, cmd)
+        Process.sleep(500)
+      end)
 
       {:noreply, state}
     else
