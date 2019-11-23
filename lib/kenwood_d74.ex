@@ -22,22 +22,10 @@ defmodule KenwoodD74 do
 
   def enable_auto_info, do: send_command("AI 1")
   def disable_auto_info, do: send_command("AI 0")
-
-  def radio_up do
-    send_command("UP")
-  end
-
-  def radio_down do
-    send_command("DW")
-  end
-
-  def set_vfo_a do
-    send_command("BC 0")
-  end
-
-  def set_vfo_b do
-    send_command("BC 1")
-  end
+  def radio_up, do: send_command("UP")
+  def radio_down, do: send_command("DW")
+  def set_vfo_a, do: send_command("BC 0")
+  def set_vfo_b, do: send_command("BC 1")
 
   def send_command(cmd) do
     Logger.info("client: send_command()")
