@@ -8,8 +8,8 @@ defmodule KenwoodD74 do
 
   # Client API
 
-  def start_link(args \\ "/dev/ttyACM0") do
-    IO.puts("start_link(), args: #{inspect(args)}")
+  def start_link(args) do
+    IO.puts("KenwoodD74.start_link(), args: #{inspect(args)}")
     GenServer.start_link(@server, args, name: @server)
   end
 
@@ -38,7 +38,7 @@ defmodule KenwoodD74 do
 
   @impl true
   def init(port) do
-    IO.puts("init(), args: #{inspect(port)}")
+    IO.puts("KenwoodD74.init(), args: #{inspect(port)}")
 
     {:ok, pid} = Circuits.UART.start_link()
     Circuits.UART.open(pid, port, speed: 115_200, active: true)

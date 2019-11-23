@@ -1,7 +1,8 @@
+# See https://hexdocs.pm/elixir/Application.html for more information on OTP Applications
 defmodule LiveviewDemo.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
+
+  import Supervisor.Spec
 
   use Application
 
@@ -11,7 +12,8 @@ defmodule LiveviewDemo.Application do
       # Start the Ecto repository
       LiveviewDemo.Repo,
       # Start the endpoint when the application starts
-      LiveviewDemoWeb.Endpoint
+      LiveviewDemoWeb.Endpoint,
+      supervisor(LiveviewDemo.RadioSupervisor, ["/dev/ttyACM0"])
       # Starts a worker by calling: LiveviewDemo.Worker.start_link(arg)
       # {LiveviewDemo.Worker, arg},
     ]
