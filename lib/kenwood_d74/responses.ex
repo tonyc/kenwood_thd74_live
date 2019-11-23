@@ -1,8 +1,8 @@
 defmodule KenwoodD74.Responses do
   @known_responses ~w(
-    AE AG AI AS BC BR BL BS BT BY CS DC DL DS DW FO FW FR
-    FS FT FV FM FP FS ID IO LC MD ME MR MS PC PS PT RA RT RX SF SH SM
-    DQ DR TN TX TY UP VD VG VM VX
+    AE AG AI AS BC BR BL BS BT BY CS DC DL DS DW FO FW FR FS FT FV FM FP FQ FS
+    ID IO LC MD ME MR MS PC PS PT RA RT RX SF SH SM DQ DR TN TX TY UP VD VG VM
+    VX
   )
 
   def message_type(raw_message) do
@@ -22,13 +22,20 @@ defmodule KenwoodD74.Responses do
   end
 
   def radio_command_response?(command) do
+    actual_command =
+      command
+      |> String.split(" ")
+      |> Enum.at(0)
+      |> String.upcase()
+      |> String.replace("\n", "")
+
     @known_responses
-    |> Enum.include?(String.upcase(command))
+    |> Enum.member?(actual_command)
   end
 
   def gps_message?(message) do
     message
-    |> String.starts_with?("$GP")
+    |> String.match?(~r/(\n?)\$GP/)
   end
 
   def crc_message?(message) do

@@ -1,7 +1,7 @@
 defmodule KenwoodD74 do
   use GenServer
   require Logger
-  alias KenwoodD74.{RadioInfo}
+  alias KenwoodD74.{RadioInfo, Responses}
 
   @topic "radio"
 
@@ -78,50 +78,29 @@ defmodule KenwoodD74 do
     {:stop, :io_error, state}
   end
 
-  def handle_info({:circuits_uart, _port, "?"}, state) do
-    Logger.info("Got '?' from radio")
-    {:noreply, state}
-  end
-
-  def handle_info({:circuits_uart, _port, "RX"}, state) do
-    {:noreply, state}
-  end
-
-  def handle_info({:circuits_uart, _port, "DW"}, state) do
-    {:noreply, state}
-  end
-
-  def handle_info({:circuits_uart, _port, "UP"}, state) do
-    {:noreply, state}
-  end
-
-  def handle_info({:circuits_uart, _port, "$GP" <> _rest = message}, state) do
-    Logger.info("GPS: #{inspect(message)}")
-    {:noreply, state}
-  end
-
-  def handle_info(
-        {:circuits_uart, _port,
-         "$$CRC" <> <<crc_byte_1::size(16), crc_byte_2::size(16), ",", message::binary>>},
-        state
-      ) do
-    Logger.info(
-      "#{__MODULE__}: found CRC message (#{inspect(crc_byte_1)}, #{inspect(crc_byte_2)}): #{
-        inspect(message)
-      }"
-    )
-
-    {:noreply, state}
-  end
-
-  # Handles parseable radio messages (those with more than one word)
-  # TODO: Discern between APRS, D-Star, GPS, and standard Kenwood CAT messages
   def handle_info({:circuits_uart, _port, message}, state) do
-    Logger.info("handle_info: :circuits_uart: attempting to parse message: #{message}")
+    message_no_newlines =
+      message
+      |> String.replace("\r\n", "\n")
+      |> String.replace("\n", "")
 
-    message
-    |> RadioInfo.parse()
-    |> broadcast()
+    case Responses.message_type(message_no_newlines) do
+      {:ok, {:gps, msg}} ->
+        Logger.info("GPS: #{inspect(msg)}")
+
+      {:ok, {:crc, msg}} ->
+        Logger.info("CRC: #{inspect(msg)}")
+
+      {:ok, {:radio_response, msg}} ->
+        Logger.info("Radio: #{inspect(msg)}")
+
+        msg
+        |> RadioInfo.parse()
+        |> broadcast()
+
+      {:error, {:unknown_message, msg}} ->
+        Logger.warn("Unknown message: #{inspect(msg)}")
+    end
 
     {:noreply, state}
   end
