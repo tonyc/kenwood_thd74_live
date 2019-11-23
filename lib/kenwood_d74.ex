@@ -40,9 +40,6 @@ defmodule KenwoodD74 do
     Logger.info("KenwoodD74.init(), args: #{inspect(port)}")
 
     {:ok, pid} = Circuits.UART.start_link()
-    Circuits.UART.open(pid, port, speed: 115_200, active: true)
-    Circuits.UART.configure(pid, framing: {Circuits.UART.Framing.Line, separator: "\r"})
-
     Process.send_after(self(), :setup, 1000)
 
     {:ok, %{pid: pid, port: port}}
@@ -51,24 +48,36 @@ defmodule KenwoodD74 do
   @impl true
   def handle_cast({:send_cmd, command}, state) do
     Logger.info("handle_cast: send_cmd(): #{inspect(command)}, state: #{inspect(state)}")
-
     Circuits.UART.write(state.pid, command)
-
     {:noreply, state}
   end
 
   @impl true
   def handle_info(:setup, state) do
-    Logger.info("handle_info: :setup, setting AI 1, state: #{inspect(state)}")
-    Circuits.UART.write(state.pid, "AI 1")
-    Process.sleep(500)
-    Circuits.UART.write(state.pid, "AI 1")
-    Process.sleep(500)
-    Circuits.UART.write(state.pid, "AI 1")
+    Logger.info("Enumerating UART ports")
+    ports = Circuits.UART.enumerate()
+    Logger.debug(inspect(ports))
 
-    Logger.info("Done attempting to set AI 1")
+    pid = state.pid
+    port = state.port
 
-    {:noreply, state}
+    if Map.has_key?(ports, port) do
+      Circuits.UART.open(pid, port, speed: 115_200, active: true)
+      Circuits.UART.configure(pid, framing: {Circuits.UART.Framing.Line, separator: "\r"})
+
+      Logger.info("handle_info: :setup, setting AI 1, state: #{inspect(state)}")
+      Circuits.UART.write(state.pid, "AI 1")
+      Process.sleep(500)
+      Circuits.UART.write(state.pid, "AI 1")
+      Process.sleep(500)
+      Circuits.UART.write(state.pid, "AI 1")
+
+      Logger.info("Done attempting to set AI 1")
+
+      {:noreply, state}
+    else
+      {:error, {:port_not_available, port}, state}
+    end
   end
 
   # Circuits.UART messages

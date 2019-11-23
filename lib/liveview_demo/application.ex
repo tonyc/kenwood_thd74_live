@@ -13,7 +13,7 @@ defmodule LiveviewDemo.Application do
       LiveviewDemo.Repo,
       # Start the endpoint when the application starts
       LiveviewDemoWeb.Endpoint,
-      supervisor(LiveviewDemo.RadioSupervisor, ["/dev/ttyACM0"])
+      supervisor(LiveviewDemo.RadioSupervisor, ["ttyACM0"])
       # Starts a worker by calling: LiveviewDemo.Worker.start_link(arg)
       # {LiveviewDemo.Worker, arg},
     ]
