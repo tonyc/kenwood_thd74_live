@@ -62,8 +62,9 @@ defmodule KenwoodD74 do
   def handle_info(:setup, state) do
     Logger.info("handle_info: :setup, setting AI 1, state: #{inspect(state)}")
     Circuits.UART.write(state.pid, "AI 1")
+    Process.sleep(500)
     Circuits.UART.write(state.pid, "AI 1")
-    Circuits.UART.write(state.pid, "AI 1")
+    Process.sleep(500)
     Circuits.UART.write(state.pid, "AI 1")
 
     Logger.info("Done attempting to set AI 1")
