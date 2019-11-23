@@ -9,7 +9,7 @@ defmodule KenwoodD74 do
   # Client API
 
   def start_link(args) do
-    IO.puts("KenwoodD74.start_link(), args: #{inspect(args)}")
+    Logger.info("KenwoodD74.start_link(), args: #{inspect(args)}")
     GenServer.start_link(@server, args, name: @server)
   end
 
@@ -38,7 +38,7 @@ defmodule KenwoodD74 do
 
   @impl true
   def init(port) do
-    IO.puts("KenwoodD74.init(), args: #{inspect(port)}")
+    Logger.info("KenwoodD74.init(), args: #{inspect(port)}")
 
     {:ok, pid} = Circuits.UART.start_link()
     Circuits.UART.open(pid, port, speed: 115_200, active: true)
@@ -51,7 +51,7 @@ defmodule KenwoodD74 do
 
   @impl true
   def handle_cast({:send_cmd, command}, state) do
-    IO.puts("handle_cast: send_cmd(): #{inspect(command)}, state: #{inspect(state)}")
+    Logger.info("handle_cast: send_cmd(): #{inspect(command)}, state: #{inspect(state)}")
 
     Circuits.UART.write(state.pid, command)
 
@@ -117,7 +117,7 @@ defmodule KenwoodD74 do
   # Handles parseable radio messages (those with more than one word)
   # TODO: Discern between APRS, D-Star, GPS, and standard Kenwood CAT messages
   def handle_info({:circuits_uart, _port, message}, state) do
-    IO.puts("handle_info: :circuits_uart: #{message}")
+    Logger.info("handle_info: :circuits_uart: unknown message: #{message}")
 
     message
     |> RadioInfo.parse()
@@ -127,7 +127,7 @@ defmodule KenwoodD74 do
   end
 
   def handle_info(msg, state) do
-    IO.puts("Unknown message: #{inspect(msg)}")
+    Logger.info("Unknown message: #{inspect(msg)}")
 
     {:noreply, state}
   end

@@ -9,7 +9,7 @@ defmodule KenwoodD74.RadioInfo do
       raw_msg
       |> String.split(" ")
 
-    Logger.info("command, args: #{inspect command}")
+    Logger.info("RadioInfo.parse: args: #{inspect command}")
     split_args =
       args
       |> String.split(",")
