@@ -3,14 +3,13 @@ defmodule KenwoodD74 do
   require Logger
   alias KenwoodD74.{RadioInfo}
 
-  @server __MODULE__
   @topic "radio"
 
   # Client API
 
   def start_link(args) do
     Logger.info("KenwoodD74.start_link(), args: #{inspect(args)}")
-    GenServer.start_link(@server, args, name: @server)
+    GenServer.start_link(__MODULE__, args, name: __MODULE__)
   end
 
   def radio_up do
@@ -31,7 +30,7 @@ defmodule KenwoodD74 do
 
   def send_command(cmd) do
     Logger.info("client: send_command()")
-    GenServer.cast(@server, {:send_cmd, cmd})
+    GenServer.cast(__MODULE__, {:send_cmd, cmd})
   end
 
   # Server API
