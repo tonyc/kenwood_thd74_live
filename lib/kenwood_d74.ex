@@ -78,11 +78,39 @@ defmodule KenwoodD74 do
     {:stop, :io_error, state}
   end
 
+  def handle_info({:circuits_uart, _port, "?"}, state) do
+    Logger.info("Got '?' from radio")
+    {:noreply, state}
+  end
+
+  def handle_info({:circuits_uart, _port, "RX"}, state) do
+    {:noreply, state}
+  end
+
   def handle_info({:circuits_uart, _port, "DW"}, state) do
     {:noreply, state}
   end
 
   def handle_info({:circuits_uart, _port, "UP"}, state) do
+    {:noreply, state}
+  end
+
+  def handle_info({:circuits_uart, _port, "$GP" <> _rest = message}, state) do
+    Logger.info("GPS: #{inspect(message)}")
+    {:noreply, state}
+  end
+
+  def handle_info(
+        {:circuits_uart, _port,
+         "$$CRC" <> <<crc_byte_1::size(16), crc_byte_2::size(16), ",", message::binary>>},
+        state
+      ) do
+    Logger.info(
+      "#{__MODULE__}: found CRC message (#{inspect(crc_byte_1)}, #{inspect(crc_byte_2)}): #{
+        inspect(message)
+      }"
+    )
+
     {:noreply, state}
   end
 
