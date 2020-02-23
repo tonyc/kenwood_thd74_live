@@ -8,12 +8,16 @@ defmodule LiveviewDemo.RadioSupervisor do
     Supervisor.start_link(__MODULE__, args)
   end
 
-  @impl true
   def init(args) do
     Logger.info("RadioSupervisor.init(): args: #{inspect args}")
 
     children = [
-      worker(KenwoodD74, [args], restart: :permanent)
+      %{
+        id: KenwoodD74,
+        start: {KenwoodD74, :start_link, [args]},
+        type: :worker,
+        restart: :permanent
+      }
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
